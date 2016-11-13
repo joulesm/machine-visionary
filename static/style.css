@@ -1,5 +1,15 @@
 
-
+.black-border{
+	background-color: black;
+	width: 1024px;
+	margin:0 auto;
+}
+.text-border {
+	background-color: black;
+	width:1024px;
+	margin: 0 auto;
+	padding-bottom:25px;
+}
 .form-style-8{
     font-family: 'Open Sans Condensed', arial, sans;
     width: 500px;

@@ -52,6 +52,9 @@ def test():
     url = app.config['URL']
     key = app.config['CV_KEY']
     result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
+    if result is None:
+        return render_template('index.html', form=ImageForm(request.form))
+
     tags = result['description']['tags']
     print "TAGS: ", tags
 
@@ -77,7 +80,7 @@ def test():
     return render_template(
         'poster.html', image_url=image_url, img_h=height,
         img_w=width, pad_w=pad_w, pad_h=pad_h, title=title.upper(), quote=demotivated_quote,
-        orig_quote=quote['quote'], tags=tags, author=quote['author'])
+        orig_quote=quote['quote'], tags=tags, author=quote['author'], form=form)
 
 @app.route('/')
 def homepage():

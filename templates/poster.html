@@ -1,20 +1,9 @@
 <html>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 	<head>
 		<title>{{title}}</title>
 	</head>
-	<style>
-	  .black-border{
-	  	background-color: black;
-	  	width: 1024px;
-	  	margin:0 auto;
-	  }
-	  .text-border {
-	  	background-color: black;
-	  	width:1024px;
-	  	margin: 0 auto;
-	  	padding-bottom:25px;
-	  }
-	</style>
 	<body>
 		<div style="text-align: center;">
 		  <div class="black-border">
@@ -27,6 +16,7 @@
 		<p>Original Quote: {{ orig_quote }}</p>
 		<p>Author: {{ author }}</p>
 		<p>Image tags: {{ tags }}</p>
+		{% include 'form-partial.html' %}
 	</body>
 
 </html>
