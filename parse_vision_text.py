@@ -43,12 +43,15 @@ class ParseVisionText:
       analyzers.append(self.Tokens)
     self.body["analyzerIds"] = analyzers
     self.tags_dict = {}
-    self.quote_dict = {}
+    self.quote_tags = {}
     self.quote = ""
 
   def demotivate(self, quote, tags):
     self.parseQuote(quote)
     self.parseTags(tags)
+    print "Quote: " + str(self.quote)
+    print "quote_tags: " + str(self.quote_tags)
+    print "tags_dict: " + str(self.tags_dict)
     return self.mergeQuotesAndTags()
 
   def parseQuote(self, quote):
@@ -77,17 +80,21 @@ class ParseVisionText:
 
   def mergeQuotesAndTags(self):
     words = self.quote.split(" ")
-    for i in range(len(words)):
-      if self.quote_tags[i] in self.change_tags:
-        new_tag = self.replaceTag(self.quote_tags[i])
+    tagI = 0
+    for wordI in range(len(words)):
+      if "'" in words[wordI]:
+        tagI += 1
+      if self.quote_tags[tagI] in self.change_tags:
+        new_tag = self.replaceTag(self.quote_tags[tagI])
         if new_tag:
           # checking for punctuation
-          if words[i][-1] in self.allowed_punct:
-            punct = words[i][-1]
-            words[i] = new_tag + punct
-            i += 1
+          if words[wordI][-1] in self.allowed_punct:
+            punct = words[wordI][-1]
+            words[wordI] = new_tag + punct
+            tagI += 1
           else:
-            words[i] = new_tag
+            words[wordI] = new_tag
+      tagI += 1
     return " ".join(words)
 
   def replaceTag(self, replace_tag):
@@ -115,8 +122,8 @@ class ParseVisionText:
 #####
 
 if __name__ == "__main__":
-  quote = "make America great!"
-  print quote
+  quote = "It can't be more fun to be a pirate than to join the Navy's boat."
+  #print quote
   tags = ["outdoor", "cat", "red", "tree", "purple", "building", "$", "''", "()", ",", "--", "!", ";"]
-  print tags
+  #print tags
   print ParseVisionText().demotivate(quote, tags)
