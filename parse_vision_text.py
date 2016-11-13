@@ -59,22 +59,26 @@ class ParseVisionText:
 
   def parseTags(self, tags):
     tags_dict = {}
-    for tag in tags:
-      self.body["text"] = tag
-      desc = self.doConn()
-      if desc:
-        words = tag.split(" ")
-        for i in range(len(words)):
-          tags_dict[words[i]] = json.loads(desc)[0]["result"][0][i]
-      time.sleep(1)
+    tags_sentence = " ".join(tags)
+    self.body["text"] = tags_sentence
+    desc = self.doConn()
+    if desc:
+      words = tags_sentence.split(" ")
+      desc_json = json.loads(desc)
+      for i in range(len(words)):
+        tags_dict[words[i]] = desc_json[0]["result"][0][i]
     self.tags_dict = tags_dict
     return tags_dict
 
   def mergeQuotesAndTags(self):
     words = self.quote.split(" ")
+    print "words"
+    print words
     for i in range(len(words)):
       if self.quote_tags[i] in self.change_tags:
-        words[i] = self.replaceTag(self.quote_tags[i])
+        new_tag = self.replaceTag(self.quote_tags[i])
+        if new_tag:
+          words[i] = self.replaceTag(self.quote_tags[i])
     return " ".join(words)
 
   def replaceTag(self, replace_tag):
@@ -104,6 +108,6 @@ class ParseVisionText:
 if __name__ == "__main__":
   quote = "make America great again"
   print quote
-  tags = ["outdoor", "cat", "red", "tree", "purple building"]
+  tags = ["outdoor", "cat", "red", "tree", "purple", "building"]
   print tags
   print ParseVisionText().demotivate(quote, tags)
