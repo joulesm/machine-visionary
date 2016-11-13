@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from wtforms import Form, TextField, validators
 
 import httplib
 import json
@@ -21,6 +22,9 @@ IMAGE_MAX_W = 840
 IMAGE_MAX_H = 525
 
 
+class ImageForm(Form):
+    img_url = TextField('Image URL:', validators=[validators.required()])
+
 def resize(width, height):
     resized_w = width
     resized_h = height
@@ -34,15 +38,20 @@ def calculate_padding(max_size, size):
     return (max_size - size) / 2
 
 
-@app.route('/test')
+
+@app.route('/demotivate', methods=['POST'])
 def test():
     quote = get_quote()
-    image_url = 'https://stephanieye.files.wordpress.com/2014/03/0080-pie-on-scooter.jpg'
-    url = app.config['URL'] 
+    form = ImageForm(request.form)
+    image_url = request.form['img_url']
+    url = app.config['URL']
     key = app.config['CV_KEY']
     result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
     tags = result['description']['tags']
+    print "TAGS: ", tags
     title = result['tags'][0]['name']
+    print title
+    print tags
     width, height = resize(result['metadata']['width'], result['metadata']['height'])
     pad_w = calculate_padding(POSTER_W, width)
     pad_h = calculate_padding(POSTER_H, height)
@@ -51,11 +60,11 @@ def test():
     #return json.dumps(result)
     return render_template(
         'poster.html', image_url=image_url, img_h=height,
-        img_w=width, pad_w=pad_w, pad_h=pad_h, title=title.upper(), quote=demotivated_quote)
+        img_w=width, pad_w=pad_w, pad_h=pad_h, title=title.upper(), quote=demotivated_quote.capitalize())
 
 @app.route('/')
 def homepage():
-    return 'Machine Visionary'
+    return render_template('index.html', form=ImageForm(request.form))
 
 if __name__ == '__main__':
     # server is publicly available

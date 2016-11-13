@@ -84,10 +84,10 @@ class ParseVisionText:
           # checking for punctuation
           if words[i][-1] in self.allowed_punct:
             punct = words[i][-1]
-            words[i] = self.replaceTag(self.quote_tags[i]) + punct
+            words[i] = new_tag + punct
             i += 1
           else:
-            words[i] = self.replaceTag(self.quote_tags[i])
+            words[i] = new_tag
     return " ".join(words)
 
   def replaceTag(self, replace_tag):

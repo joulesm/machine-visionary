@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Machine Visionary</title>
+    </head>
+
+    <body>
+        <form action="/demotivate" method="post">
+            {{ form.csrf }}
+            <div class="input text">
+                {{ form.img_url.label }} {{ form.img_url }}
+            </div>
+            <div class="input submit">
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </body>
+</html>
