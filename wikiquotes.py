@@ -135,6 +135,8 @@ ALLOWED_CHARS["."] = True;
 ALLOWED_CHARS[","] = True;
 ALLOWED_CHARS["?"] = True;
 ALLOWED_CHARS[" "] = True;
+ALLOWED_CHARS['\xe2\x80\x99'] = True;
+
 
 def get_quote_by_person(person):
   payload = {'format': 'json', 'action': 'parse', 'prop':'text', 'page': person}
@@ -151,11 +153,12 @@ def get_quote():
   q = None
   while q == None:
     p = persons[random.randint(0, len(persons) - 1)]
+    print p
     q = get_quote_by_person(p)
-    if len(q) > 100:
+    print q
+    if len(q) > 150:
       q = None
     else:
-      print q
       for c in q:
         if not c in ALLOWED_CHARS:
           print c + " is not allowed"
