@@ -9,9 +9,11 @@ import random
 
 from helper import get_api_results_from_url
 from wikiquotes import get_quote
+from parse_vision_text import ParseVisionText
 
 app = Flask(__name__)
 app.config.from_object('config')
+parser = ParseVisionText()
 
 
 def resize(width, height):
@@ -27,16 +29,19 @@ def resize(width, height):
 @app.route('/test')
 def test():
   print get_quote()
-	image_url = 'https://stephanieye.files.wordpress.com/2014/03/0080-pie-on-scooter.jpg'
-	url = app.config['URL']
-	key = app.config['CV_KEY']
-	result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
-	tags = result['description']['tags']
-	title = result['tags'][0]['name']
-	width, height = resize(result['metadata']['width'], result['metadata']['height'])
+  image_url = 'https://stephanieye.files.wordpress.com/2014/03/0080-pie-on-scooter.jpg'
+  url = app.config['URL']
+  key = app.config['CV_KEY']
+  result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
+  tags = result['description']['tags']
+  title = result['tags'][0]['name']
+  print title
+  print parser.parse(title)
+
+  width, height = resize(result['metadata']['width'], result['metadata']['height'])
 	#return json.dumps({'tags':tags, 'title':title})
 	#return json.dumps(result)
-	return render_template('poster.html', image_url=image_url, img_h=height, img_w=width)
+  return render_template('poster.html', image_url=image_url, img_h=height, img_w=width)
 
 @app.route('/')
 def homepage():
