@@ -57,7 +57,7 @@ class ParseVisionText:
     desc = self.doConn()
     if desc:
       self.quote_tags = json.loads(desc)[0]["result"][0]
-      for i in range(len(self.quote_tags)):
+      for i in range(len(self.quote_tags), -1):
         if self.quote_tags[i] not in self.valid_tags:
           del self.quote_tags[i]
     return self.quote_tags
