@@ -33,7 +33,7 @@ def resize(width, height):
 def calculate_padding(max_size, size):
     return (max_size - size) / 2
 
-    
+
 @app.route('/test')
 def test():
     quote = get_quote()
@@ -46,12 +46,12 @@ def test():
     width, height = resize(result['metadata']['width'], result['metadata']['height'])
     pad_w = calculate_padding(POSTER_W, width)
     pad_h = calculate_padding(POSTER_H, height)
-    print parser.demotivate(quote['quote'], tags)
+    demotivated_quote = parser.demotivate(quote['quote'], tags)
       #return json.dumps({'tags':tags, 'title':title})
     #return json.dumps(result)
     return render_template(
         'poster.html', image_url=image_url, img_h=height,
-        img_w=width, pad_w=pad_w, pad_h=pad_h, title=title.upper(), quote="Make America great again!")
+        img_w=width, pad_w=pad_w, pad_h=pad_h, title=title.upper(), quote=demotivated_quote)
 
 @app.route('/')
 def homepage():
