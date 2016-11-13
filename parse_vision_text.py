@@ -81,21 +81,25 @@ class ParseVisionText:
   def mergeQuotesAndTags(self):
     words = self.quote.split(" ")
     tagI = 0
-    for wordI in range(len(words)):
-      if "'" in words[wordI]:
+    try:
+      for wordI in range(len(words)):
+        if "'" in words[wordI]:
+          tagI += 1
+        if self.quote_tags[tagI] in self.change_tags:
+          new_tag = self.replaceTag(self.quote_tags[tagI])
+          if new_tag:
+            # checking for punctuation
+            if words[wordI][-1] in self.allowed_punct:
+              punct = words[wordI][-1]
+              words[wordI] = new_tag + punct
+              tagI += 1
+            else:
+              words[wordI] = new_tag
         tagI += 1
-      if self.quote_tags[tagI] in self.change_tags:
-        new_tag = self.replaceTag(self.quote_tags[tagI])
-        if new_tag:
-          # checking for punctuation
-          if words[wordI][-1] in self.allowed_punct:
-            punct = words[wordI][-1]
-            words[wordI] = new_tag + punct
-            tagI += 1
-          else:
-            words[wordI] = new_tag
-      tagI += 1
-    return " ".join(words)
+    except Exception as e:
+      pass
+    finally:
+      return " ".join(words)
 
   def replaceTag(self, replace_tag):
     for word, tag in self.tags_dict.iteritems():
@@ -122,7 +126,7 @@ class ParseVisionText:
 #####
 
 if __name__ == "__main__":
-  quote = "It can't be more fun to be a pirate than to join the Navy's boat."
+  quote = "It's not manufacturers trying to rip anybody off or anything like that. There's nobody getting rich writing software that I know of."
   #print quote
   tags = ["outdoor", "cat", "red", "tree", "purple", "building", "$", "''", "()", ",", "--", "!", ";"]
   #print tags
