@@ -100,13 +100,14 @@ class ParseVisionText:
 
 #####
 
-quote = "make America great again"
-print quote
-#print ParseVisionText().parseQuote(quote)
+if __name__ == '__main__':
+  quote = "make America great again"
+  print quote
+  #print ParseVisionText().parseQuote(quote)
 
-tags = ["red", "tree", "purple building"]
-print tags
-#print json.dumps(ParseVisionText().parseTags(tags))
+  tags = ["red", "tree", "purple building"]
+  print tags
+  #print json.dumps(ParseVisionText().parseTags(tags))
 
-print ""
-ParseVisionText().demotivate(quote, tags)
+  print ""
+  ParseVisionText().demotivate(quote, tags)
