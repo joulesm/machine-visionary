@@ -123,19 +123,31 @@ def extract_quotes(tree, max_quotes):
 
     return quotes_list
 
-persons = ['Bill Gates', 'Steve Jobs', 'Elon Musk', 'Kanye West', 'Carl Sagan', 'Donald Trump', 'Ada Lovelace', 'Neil deGrasse Tyson', 'Emma Watson', 'Rosalind Franklin', 'Malala Yousafzai', 'Susan B. Anthony', 'Martin Luther King, Jr.', 'Toni Morrison', 'Gloria Steinem']
+persons = ['Bill Gates', 'Steve Jobs', 'Elon Musk', 'Kanye West', 'Carl Sagan', 'Ada Lovelace', 'Neil deGrasse Tyson', 'Emma Watson', 'Rosalind Franklin', 'Malala Yousafzai', 'Susan B. Anthony', 'Martin Luther King, Jr.', 'Toni Morrison', 'Gloria Steinem', 'Donald Trump']
 
 def get_quote_by_person(person):
-  payload = {'format': 'json', 'action': 'parse', 'prop':'text', 'page': 'person'}
+  payload = {'format': 'json', 'action': 'parse', 'prop':'text', 'page': person}
   r = requests.get(API_URL, params=payload)
   html_content = byteify(json.loads(r.text))['parse']['text']['*']
   html_tree = lxml.html.fromstring(html_content)
-  quotes = extract_quotes(html_tree,10)
-  return quotes[random.randint(0, len(quotes) - 1)]
+  quotes = extract_quotes(html_tree,20)
+  if len(quotes) == 0:
+    return None
+  else: 
+    return quotes[random.randint(0, len(quotes) - 1)]
 
 def get_quote():
-  p = persons[random.randint(0, len(persons) - 1)]
-  return {"quote": get_quote_by_person(p), "author": p}
+  q = None
+  while q == None:
+    p = persons[random.randint(0, len(persons) - 1)]
+    q = get_quote_by_person(p)
+    if len(q) > 100:
+      q = None
+  return {"quote": q, "author": p}
+
+if __name__ == '__main__':
+    # server is publicly available
+    print get_quote()
   
  
 
