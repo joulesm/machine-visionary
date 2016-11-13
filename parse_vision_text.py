@@ -17,7 +17,6 @@ class ParseVisionText:
   Tokens = "08ea174b-bfdb-4e64-987e-602f85da7f72"
   body = {
     "language" : "en",
-    "analyzerIds" : [POS_tags]
   }
 
   headers = {
@@ -42,12 +41,31 @@ class ParseVisionText:
       analyzers.append(self.Tokens)
     self.body["analyzerIds"] = analyzers
     self.tags_dict = {}
+    self.quote_dict = {}
     self.quote = ""
 
   def demotivate(self, quote, tags):
     self.parseQuote(quote)
     self.parseTags(tags)
+    print self.mergeQuotesAndTags()
     print "done"
+
+  def mergeQuotesAndTags(self):
+    words = self.quote.split(" ")
+    for i in range(len(words)):
+      if self.quote_tags[i] in self.change_tags:
+        words[i] = "banana"
+    return " ".join(words)
+
+  def parseQuote(self, quote):
+    self.quote = quote
+    self.body["text"] = quote
+    desc = self.doConn()
+    if desc:
+      self.quote_tags = json.loads(desc)[0]["result"][0]
+      print quote
+      print self.quote_tags
+    return self.quote_tags
 
   def parseTags(self, tags):
     tags_dict = {}
@@ -62,15 +80,6 @@ class ParseVisionText:
     self.tags_dict = tags_dict
     print tags_dict
     return tags_dict
-
-  def parseQuote(self, quote):
-    self.body["text"] = quote
-    desc = self.doConn()
-    if desc:
-      self.tags_dict["quote"] = json.loads(desc)[0]["result"][0]
-      print quote
-      print self.tags_dict["quote"]
-    return self.tags_dict["quote"]
 
   def doConn(self):
     try:
