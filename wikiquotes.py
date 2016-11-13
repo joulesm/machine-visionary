@@ -154,7 +154,7 @@ def get_quote():
   while q == None:
     p = persons[random.randint(0, len(persons) - 1)]
     print p
-    q = get_quote_by_person(p)
+    q = get_quote_by_person(p).encode('utf-8')
     print q
     if len(q) > 150:
       q = None
