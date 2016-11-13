@@ -28,7 +28,7 @@ def resize(width, height):
 
 @app.route('/test')
 def test():
-  print get_quote()
+  quote = get_quote()
   image_url = 'https://stephanieye.files.wordpress.com/2014/03/0080-pie-on-scooter.jpg'
   url = app.config['URL']
   key = app.config['CV_KEY']
@@ -36,7 +36,9 @@ def test():
   tags = result['description']['tags']
   title = result['tags'][0]['name']
   print title
-  print parser.parse(title)
+  print tags
+  print quote
+  print parser.demotivate(quote['quote'], tags)
 
   width, height = resize(result['metadata']['width'], result['metadata']['height'])
 	#return json.dumps({'tags':tags, 'title':title})
