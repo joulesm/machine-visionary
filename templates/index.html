@@ -1,17 +1,21 @@
 <html>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
     <head>
         <title>Machine Visionary</title>
     </head>
 
     <body>
-        <form action="/demotivate" method="post">
-            {{ form.csrf }}
-            <div class="input text">
-                {{ form.img_url.label }} {{ form.img_url }}
-            </div>
-            <div class="input submit">
-                <input type="submit" value="Submit" />
-            </div>
-        </form>
+        <div class="form-style-8">
+            <form action="/demotivate" method="post">
+                {{ form.csrf }}
+                <div class="input text">
+                    {{ form.img_url.label }} {{ form.img_url }}
+                </div>
+                <div class="input submit">
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+        </div>
     </body>
 </html>
