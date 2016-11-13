@@ -9,7 +9,7 @@ class ParseVisionText:
 
   params = urllib.urlencode({})
 
-  change_tags = ["NN", "JJ"]
+  change_tags = ["JJ", "JJR", "JJS", "NN", "NNS", "RB", "RBR", "RBS", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
 
   # Available analyzerIds:
   POS_tags = "4fa79af1-f22c-408d-98bb-b7d7aeef7f04"
