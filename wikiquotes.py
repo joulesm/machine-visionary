@@ -128,7 +128,7 @@ persons = ['Bill Gates', 'Steve Jobs', 'Elon Musk', 'Kanye West', 'Carl Sagan', 
 def get_quote_by_person(person):
   payload = {'format': 'json', 'action': 'parse', 'prop':'text', 'page': person}
   r = requests.get(API_URL, params=payload)
-  html_content = byteify(json.loads(r.text))['parse']['text']['*']
+  html_content = json.loads(r.text)['parse']['text']['*']
   html_tree = lxml.html.fromstring(html_content)
   quotes = extract_quotes(html_tree,20)
   if len(quotes) == 0:
