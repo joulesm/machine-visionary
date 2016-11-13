@@ -23,7 +23,7 @@ def process_request( url, json, data, headers, params ):
 
         response = requests.request( 'post', url, json = json, data = data, headers = headers, params = params )
 
-        if response.status_code == 429: 
+        if response.status_code == 429:
 
             print "Message: ", response.json()
 
