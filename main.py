@@ -8,9 +8,12 @@ import urllib
 import random
 
 from helper import get_api_results_from_url
+from wikiquotes import get_quote
+from parse_vision_text import ParseVisionText
 
 app = Flask(__name__)
 app.config.from_object('config')
+parser = ParseVisionText()
 
 POSTER_W = 1024
 POSTER_H = 640
@@ -33,6 +36,7 @@ def calculate_padding(max_size, size):
 
 @app.route('/test')
 def test():
+  quote = get_quote()
 	image_url = 'https://stephanieye.files.wordpress.com/2014/03/0080-pie-on-scooter.jpg'
 	url = app.config['URL']
 	key = app.config['CV_KEY']
@@ -42,7 +46,7 @@ def test():
 	width, height = resize(result['metadata']['width'], result['metadata']['height'])
 	pad_w = calculate_padding(POSTER_W, width)
 	pad_h = calculate_padding(POSTER_H, height)
-
+  print parser.demotivate(quote['quote'], tags)
 	#return json.dumps({'tags':tags, 'title':title})
 	#return json.dumps(result)
 	return render_template(
@@ -51,8 +55,8 @@ def test():
 
 @app.route('/')
 def homepage():
-    return 'Machine Visionary'
+  return 'Machine Visionary'
 
 if __name__ == '__main__':
-    # server is publicly available
-    app.run(host='0.0.0.0', port=8000)
+  # server is publicly available
+  app.run(host='0.0.0.0', port=8000)
