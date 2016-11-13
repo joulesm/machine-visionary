@@ -2,12 +2,14 @@
 # # Module that takes input "visionary" text and
 # # parses out the parts of speech for replacement
 
-import httplib, urllib, base64, json
+import httplib, urllib, base64, json, time
 import traceback
 
 class ParseVisionText:
 
   params = urllib.urlencode({})
+
+  change_tags = ["NN", "JJ"]
 
   # Available analyzerIds:
   POS_tags = "4fa79af1-f22c-408d-98bb-b7d7aeef7f04"
@@ -39,9 +41,38 @@ class ParseVisionText:
     if tokens_analyzer:
       analyzers.append(self.Tokens)
     self.body["analyzerIds"] = analyzers
+    self.tags_dict = {}
+    self.quote = ""
 
-  def parse(self, text):
-    self.body["text"] = text
+  def demotivate(self, quote, tags):
+    self.parseQuote(quote)
+    self.parseTags(tags)
+    print "done"
+
+  def parseTags(self, tags):
+    tags_dict = {}
+    for tag in tags:
+      self.body["text"] = tag
+      desc = self.doConn()
+      if desc:
+        words = tag.split(" ")
+        for i in range(len(words)):
+          tags_dict[words[i]] = json.loads(desc)[0]["result"][0][i]
+      time.sleep(1)
+    self.tags_dict = tags_dict
+    print tags_dict
+    return tags_dict
+
+  def parseQuote(self, quote):
+    self.body["text"] = quote
+    desc = self.doConn()
+    if desc:
+      self.tags_dict["quote"] = json.loads(desc)[0]["result"][0]
+      print quote
+      print self.tags_dict["quote"]
+    return self.tags_dict["quote"]
+
+  def doConn(self):
     try:
       conn = httplib.HTTPSConnection("api.projectoxford.ai")
       conn.request(
@@ -60,4 +91,13 @@ class ParseVisionText:
 
 #####
 
-print ParseVisionText().parse("Julia you are super cute")
+quote = "make America great again"
+print quote
+#print ParseVisionText().parseQuote(quote)
+
+tags = ["red", "tree", "purple building"]
+print tags
+#print json.dumps(ParseVisionText().parseTags(tags))
+
+print ""
+ParseVisionText().demotivate(quote, tags)
