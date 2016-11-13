@@ -5,11 +5,12 @@
         <title>Machine Visionary</title>
     </head>
 
-    <div class="form-style-8">
         {% if errors is not none %}
-          <p>{{ errors }}</p>
+
+        <div class="form-style-8">
+             <p>{{ errors }}</p>
+        </div>
         {% endif %}
-    </div>
 
     <body>
         {% include 'form-partial.html' %}

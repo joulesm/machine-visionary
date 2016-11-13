@@ -85,7 +85,7 @@ def test():
 
 @app.route('/')
 def homepage():
-    return render_template('index.html', form=ImageForm(request.form))
+    return render_template('index.html', form=ImageForm(request.form), errors=None)
 
 if __name__ == '__main__':
     # server is publicly available
