@@ -43,12 +43,13 @@ def capitalize_sentence(sentence):
     return ' '.join(words)
 
 
+
 @app.route('/demotivate', methods=['POST'])
 def test():
     quote = get_quote()
     form = ImageForm(request.form)
     image_url = request.form['img_url']
-    url = app.config['URL'] 
+    url = app.config['URL']
     key = app.config['CV_KEY']
     result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
     tags = result['description']['tags']
