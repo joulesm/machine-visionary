@@ -12,15 +12,23 @@ from helper import get_api_results_from_url
 app = Flask(__name__)
 app.config.from_object('config')
 
+POSTER_W = 1024
+POSTER_H = 640
+IMAGE_MAX_W = 840
+IMAGE_MAX_H = 525
+
 
 def resize(width, height):
 	resized_w = width
 	resized_h = height
-	while resized_w > 720 or resized_h > 720:
+	while resized_w > IMAGE_MAX_W or resized_h > IMAGE_MAX_H:
 		resized_w *= 0.8
 		resized_h *= 0.8
 
 	return (resized_w, resized_h)
+
+def calculate_padding(max_size, size):
+	return (max_size - size) / 2
 
 
 @app.route('/test')
@@ -32,9 +40,14 @@ def test():
 	tags = result['description']['tags']
 	title = result['tags'][0]['name']
 	width, height = resize(result['metadata']['width'], result['metadata']['height'])
+	pad_w = calculate_padding(POSTER_W, width)
+	pad_h = calculate_padding(POSTER_H, height)
+
 	#return json.dumps({'tags':tags, 'title':title})
 	#return json.dumps(result)
-	return render_template('poster.html', image_url=image_url, img_h=height, img_w=width)
+	return render_template(
+		'poster.html', image_url=image_url, img_h=height,
+		img_w=width, pad_w=pad_w, pad_h=pad_h, title=title.upper(), quote="Make America great again!")
 
 @app.route('/')
 def homepage():

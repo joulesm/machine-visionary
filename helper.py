@@ -24,9 +24,8 @@ def process_request( url, json, data, headers, params ):
         response = requests.request( 'post', url, json = json, data = data, headers = headers, params = params )
 
         if response.status_code == 429: 
-            print response.json()
 
-            print "Message: ", response.json()['error']['message']
+            print "Message: ", response.json()
 
             if retries <= _maxNumRetries: 
                 time.sleep(1) 
@@ -47,7 +46,7 @@ def process_request( url, json, data, headers, params ):
                     result = response.content
         else:
             print "Error code: ", response.status_code
-            print "Message: ", response.json()['error']['message'] 
+            print "Message: ", response.json()
 
         break
         
