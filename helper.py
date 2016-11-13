@@ -1,6 +1,5 @@
 import time 
 import requests
-import cv2
 import operator
 import numpy as np
 
@@ -25,6 +24,7 @@ def process_request( url, json, data, headers, params ):
         response = requests.request( 'post', url, json = json, data = data, headers = headers, params = params )
 
         if response.status_code == 429: 
+            print response.json()
 
             print "Message: ", response.json()['error']['message']
 
@@ -52,17 +52,6 @@ def process_request( url, json, data, headers, params ):
         break
         
     return result
-
-def url2image(image_url):
-    # Load the original image, fetched from the URL
-    arr = np.asarray( bytearray( requests.get( image_url ).content ), dtype=np.uint8 )
-    img = cv2.cvtColor( cv2.imdecode( arr, -1 ), cv2.COLOR_BGR2RGB )
-    return img
-
-def file2image(image_path):
-    arr = cv2.imread(image_path)
-    img = cv2.cvtColor(arr,cv2.COLOR_BGR2RGB)
-    return img
 
 def get_api_results_from_url(url_image, visual_features, url, key):
     feature_string = ",".join(visual_features)

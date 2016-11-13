@@ -12,13 +12,29 @@ from helper import get_api_results_from_url
 app = Flask(__name__)
 app.config.from_object('config')
 
+
+def resize(width, height):
+	resized_w = width
+	resized_h = height
+	while resized_w > 720 or resized_h > 720:
+		resized_w *= 0.8
+		resized_h *= 0.8
+
+	return (resized_w, resized_h)
+
+
 @app.route('/test')
 def test():
-	image_url = 'https://portalstoragewuprod.azureedge.net/vision/Analysis/5-1.jpg'
+	image_url = 'https://stephanieye.files.wordpress.com/2014/03/0080-pie-on-scooter.jpg'
 	url = app.config['URL']
 	key = app.config['CV_KEY']
-	result = get_api_results_from_url(image_url, ['ImageType'], url, key)
-	return json.dumps(result)
+	result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
+	tags = result['description']['tags']
+	title = result['tags'][0]['name']
+	width, height = resize(result['metadata']['width'], result['metadata']['height'])
+	#return json.dumps({'tags':tags, 'title':title})
+	#return json.dumps(result)
+	return render_template('poster.html', image_url=image_url, img_h=height, img_w=width)
 
 @app.route('/')
 def homepage():
