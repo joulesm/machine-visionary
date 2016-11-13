@@ -47,15 +47,7 @@ class ParseVisionText:
   def demotivate(self, quote, tags):
     self.parseQuote(quote)
     self.parseTags(tags)
-    print self.mergeQuotesAndTags()
-    print "done"
-
-  def mergeQuotesAndTags(self):
-    words = self.quote.split(" ")
-    for i in range(len(words)):
-      if self.quote_tags[i] in self.change_tags:
-        words[i] = "banana"
-    return " ".join(words)
+    return self.mergeQuotesAndTags()
 
   def parseQuote(self, quote):
     self.quote = quote
@@ -63,8 +55,6 @@ class ParseVisionText:
     desc = self.doConn()
     if desc:
       self.quote_tags = json.loads(desc)[0]["result"][0]
-      print quote
-      print self.quote_tags
     return self.quote_tags
 
   def parseTags(self, tags):
@@ -78,8 +68,20 @@ class ParseVisionText:
           tags_dict[words[i]] = json.loads(desc)[0]["result"][0][i]
       time.sleep(1)
     self.tags_dict = tags_dict
-    print tags_dict
     return tags_dict
+
+  def mergeQuotesAndTags(self):
+    words = self.quote.split(" ")
+    for i in range(len(words)):
+      if self.quote_tags[i] in self.change_tags:
+        words[i] = self.replaceTag(self.quote_tags[i])
+    return " ".join(words)
+
+  def replaceTag(self, replace_tag):
+    for word, tag in self.tags_dict.iteritems():
+      if tag == replace_tag:
+        del self.tags_dict[word]
+        return word
 
   def doConn(self):
     try:
@@ -91,7 +93,6 @@ class ParseVisionText:
         headers = self.headers)
       response = conn.getresponse()
       data = response.read()
-      #print(data)
       conn.close()
       return data
     except Exception as e:
@@ -100,14 +101,9 @@ class ParseVisionText:
 
 #####
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   quote = "make America great again"
   print quote
-  #print ParseVisionText().parseQuote(quote)
-
-  tags = ["red", "tree", "purple building"]
+  tags = ["outdoor", "cat", "red", "tree", "purple building"]
   print tags
-  #print json.dumps(ParseVisionText().parseTags(tags))
-
-  print ""
-  ParseVisionText().demotivate(quote, tags)
+  print ParseVisionText().demotivate(quote, tags)

@@ -1,1 +1,20 @@
-<img src="{{image_url}}" width="{{img_w}}" height="{{img_h}}" style="padding-left: 10px; border: solid black; padding-top: 10px; padding-right: 10px">
+<style>
+  .black-border{
+  	background-color: black;
+  	width: 1024px;
+  	margin:0 auto;
+  }
+  .text-border {
+  	background-color: black;
+  	width:1024px;
+  	margin: 0 auto;
+  	padding-bottom:25px;
+  }
+</style>
+<div style="text-align: center;">
+  <div class="black-border">
+    <img src="{{image_url}}" width="{{img_w}}" height="{{img_h}}" style="margin-top: {{pad_h}}px; border: 5px solid #4485ed;">
+  </div>
+  <div class="text-border"><font face="baskerville" style="font-size:100;" color="#4485ed">{{title}}</font></div>
+  <div class="text-border"><font face="trebuchet ms" style="font-size: 36;" color="#c4cad3">{{quote}}</font></div>
+</div>
