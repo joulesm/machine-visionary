@@ -10,6 +10,8 @@ class ParseVisionText:
   params = urllib.urlencode({})
 
   change_tags = ["JJ", "JJR", "JJS", "NN", "NNS", "RB", "RBR", "RBS", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+  valid_tags = ["CC", "CD", "DT", "EX", "FW", "IN", "JJ", "JJR", "JJS", "LS", "MD", "NN", "NNP", "NNPS", "NNS", "PDT", "POS", "PRP$", "RB", "RBR", "RBS", "RP", "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "WDT", "WP", "WP$", "WRB"]
+  allowed_punct = ["'", "!", ".", ",", "?"]
 
   # Available analyzerIds:
   POS_tags = "4fa79af1-f22c-408d-98bb-b7d7aeef7f04"
@@ -55,6 +57,9 @@ class ParseVisionText:
     desc = self.doConn()
     if desc:
       self.quote_tags = json.loads(desc)[0]["result"][0]
+      for i in range(len(self.quote_tags)):
+        if self.quote_tags[i] not in self.valid_tags:
+          del self.quote_tags[i]
     return self.quote_tags
 
   def parseTags(self, tags):
@@ -72,13 +77,17 @@ class ParseVisionText:
 
   def mergeQuotesAndTags(self):
     words = self.quote.split(" ")
-    print "words"
-    print words
     for i in range(len(words)):
       if self.quote_tags[i] in self.change_tags:
         new_tag = self.replaceTag(self.quote_tags[i])
         if new_tag:
-          words[i] = self.replaceTag(self.quote_tags[i])
+          # checking for punctuation
+          if words[i][-1] in self.allowed_punct:
+            punct = words[i][-1]
+            words[i] = self.replaceTag(self.quote_tags[i]) + punct
+            i += 1
+          else:
+            words[i] = self.replaceTag(self.quote_tags[i])
     return " ".join(words)
 
   def replaceTag(self, replace_tag):
@@ -106,8 +115,8 @@ class ParseVisionText:
 #####
 
 if __name__ == "__main__":
-  quote = "make America great again"
+  quote = "make America great!"
   print quote
-  tags = ["outdoor", "cat", "red", "tree", "purple", "building"]
+  tags = ["outdoor", "cat", "red", "tree", "purple", "building", "$", "''", "()", ",", "--", "!", ";"]
   print tags
   print ParseVisionText().demotivate(quote, tags)
