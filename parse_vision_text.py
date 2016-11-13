@@ -74,11 +74,12 @@ class ParseVisionText:
     words = self.quote.split(" ")
     print "words"
     print words
+    print "QUOTE TAGS: ", self.quote_tags
     for i in range(len(words)):
       if self.quote_tags[i] in self.change_tags:
         new_tag = self.replaceTag(self.quote_tags[i])
         if new_tag:
-          words[i] = self.replaceTag(self.quote_tags[i])
+          words[i] = new_tag
     return " ".join(words)
 
   def replaceTag(self, replace_tag):
