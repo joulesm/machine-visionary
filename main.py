@@ -53,7 +53,8 @@ def test():
     key = app.config['CV_KEY']
     result = get_api_results_from_url(image_url, ['Description', 'Categories', 'Tags'], url, key)
     if result is None:
-        return render_template('index.html', form=ImageForm(request.form))
+        return render_template('index.html', form=ImageForm(request.form),
+            errors="Computer Vision API returned an error :(. Please try again.")
 
     tags = result['description']['tags']
     print "TAGS: ", tags
