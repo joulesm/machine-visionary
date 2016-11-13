@@ -19,6 +19,7 @@ MIN_QUOTE_LEN = 6
 MIN_QUOTE_WORDS = 3
 MAIN_PAGE = "Main Page"
 API_URL = "http://en.wikiquote.org/w/api.php";
+ALLOWED_CHARS = {}
 
 
 
@@ -125,6 +126,16 @@ def extract_quotes(tree, max_quotes):
 
 persons = ['Bill Gates', 'Steve Jobs', 'Elon Musk', 'Kanye West', 'Carl Sagan', 'Ada Lovelace', 'Neil deGrasse Tyson', 'Emma Watson', 'Rosalind Franklin', 'Malala Yousafzai', 'Susan B. Anthony', 'Martin Luther King, Jr.', 'Toni Morrison', 'Gloria Steinem', 'Donald Trump']
 
+for i in range(0, 26):
+    ALLOWED_CHARS[chr(65 + i)] = True;
+    ALLOWED_CHARS[chr(96 + i)] = True;
+ALLOWED_CHARS["'"] = True;
+ALLOWED_CHARS["!"] = True;
+ALLOWED_CHARS["."] = True;
+ALLOWED_CHARS[","] = True;
+ALLOWED_CHARS["?"] = True;
+ALLOWED_CHARS[" "] = True;
+
 def get_quote_by_person(person):
   payload = {'format': 'json', 'action': 'parse', 'prop':'text', 'page': person}
   r = requests.get(API_URL, params=payload)
@@ -143,6 +154,13 @@ def get_quote():
     q = get_quote_by_person(p)
     if len(q) > 100:
       q = None
+    else:
+      print q
+      for c in q:
+        if not c in ALLOWED_CHARS:
+          print c + " is not allowed"
+          q = None
+          break
   return {"quote": q, "author": p}
 
 if __name__ == '__main__':
