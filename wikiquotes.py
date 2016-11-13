@@ -123,6 +123,7 @@ def extract_quotes(tree, max_quotes):
 
     return quotes_list
 
+persons = ['Bill Gates', 'Steve Jobs', 'Elon Musk', 'Kanye West', 'Carl Sagan', 'Donald Trump', 'Ada Lovelace', 'Neil deGrasse Tyson', 'Emma Watson', 'Rosalind Franklin', 'Malala Yousafzai', 'Susan B. Anthony', 'Martin Luther King, Jr.', 'Toni Morrison', 'Gloria Steinem']
 
 def get_quote_by_person(person):
   payload = {'format': 'json', 'action': 'parse', 'prop':'text', 'page': 'person'}
@@ -131,6 +132,9 @@ def get_quote_by_person(person):
   html_tree = lxml.html.fromstring(html_content)
   quotes = extract_quotes(html_tree,10)
   return quotes[random.randint(0, len(quotes) - 1)]
+
+def get_quote():
+  return get_quote_by_person(persons[random.randint(0, len(persons) - 1)])
   
  
 
